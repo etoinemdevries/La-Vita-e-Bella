@@ -10,6 +10,10 @@ namespace La_Vita_e_Bella
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Mama mia");
+            Console.WriteLine("Papa pia");
+            Console.WriteLine("Baby got that diarrhoea");
+            Console.ReadLine();
         }
     }
 }
