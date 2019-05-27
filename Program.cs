@@ -1,4 +1,5 @@
-﻿using System;
+﻿using La_Vita_e_Bella.gui.guis;
+using System;
 
 namespace La_Vita_e_Bella
 {
@@ -10,6 +11,7 @@ namespace La_Vita_e_Bella
         [STAThread]
         public static void Main(string[] args)
         {
+            new Kassa().ShowDialog();
         }
     }
 }
