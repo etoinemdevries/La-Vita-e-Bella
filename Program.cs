@@ -1,4 +1,5 @@
-﻿using La_Vita_e_Bella.gui.guis;
+﻿using La_Vita_e_Bella.gui;
+using La_Vita_e_Bella.gui.guis;
 using System;
 using System.Windows.Forms;
 
@@ -16,6 +17,13 @@ namespace La_Vita_e_Bella
         {
             // TODO: Login screen
             Application.Run(kassa);
+        }
+
+        /* Shows a gui and hides the current gui */
+        public static void Show(Gui showed, Gui current)
+        {
+            showed.Visible = true;
+            current.Visible = false;
         }
 
         static Program()

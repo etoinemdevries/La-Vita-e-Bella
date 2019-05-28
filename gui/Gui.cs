@@ -62,10 +62,9 @@ namespace La_Vita_e_Bella.gui
 
                 case "Logout":
                     if (!logout) break;
-                    GC.Collect();
+                    Program.Show(Program.login, this);
 
-                    Program.login.Visible = true;
-                    Visible = false;
+                    GC.Collect();
                     break;
             }
         }
