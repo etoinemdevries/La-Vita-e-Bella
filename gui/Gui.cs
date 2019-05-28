@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
+/* Robert */
 namespace La_Vita_e_Bella.gui
 {
     public class Gui : Form
@@ -10,8 +11,8 @@ namespace La_Vita_e_Bella.gui
 
         protected Gui(bool logout)
         {
-            /* Set window properties */
-            Name = Text = "La Vita e Bella II";
+            /* Set window title and fullscreen */
+            Name = Text = "La Vita e Bella";
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
 
@@ -33,6 +34,7 @@ namespace La_Vita_e_Bella.gui
 
             if (logout)
             {
+                /* Adds logout button if it should be added */
                 Button button = AddButton("Logout", Color.FromArgb(80, 80, 250), Width - 102, 0, 60, 20);
                 button.Click += OnClick;
             }

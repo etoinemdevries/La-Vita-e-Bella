@@ -19,17 +19,17 @@ namespace La_Vita_e_Bella
             Application.Run(kassa);
         }
 
+        static Program()
+        {
+            kassa = new Kassa();
+            login = new Login();
+        }
+
         /* Shows a gui and hides the current gui */
         public static void Show(Gui showed, Gui current)
         {
             showed.Visible = true;
             current.Visible = false;
-        }
-
-        static Program()
-        {
-            kassa = new Kassa();
-            login = new Login();
         }
     }
 }
