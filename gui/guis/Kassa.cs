@@ -5,7 +5,7 @@ namespace La_Vita_e_Bella.gui.guis
 {
     public class Kassa : Gui
     {
-        public Kassa()
+        public Kassa() : base(true)
         {
 
         }

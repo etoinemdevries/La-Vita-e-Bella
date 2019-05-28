@@ -7,7 +7,7 @@ namespace La_Vita_e_Bella.gui.guis
 {
     public class Login : Gui
     {
-        public Login()
+        public Login() : base(false)
         {
             Name = Text = "Hallo";
             hi();

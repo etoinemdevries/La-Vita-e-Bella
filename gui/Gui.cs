@@ -6,7 +6,9 @@ namespace La_Vita_e_Bella.gui
 {
     public class Gui : Form
     {
-        protected Gui()
+        public readonly bool logout;
+
+        protected Gui(bool logout)
         {
             /* Set window properties */
             Name = Text = "La Vita e Bella II";
@@ -27,11 +29,14 @@ namespace La_Vita_e_Bella.gui
             /* Register click events for buttons */
             close.Click += OnClick;
             minimize.Click += OnClick;
+            this.logout = logout;
 
-            /* Add buttons to interface */
-            Controls.Add(close);
-            Controls.Add(minimize);
-
+            if (logout)
+            {
+                Button button = AddButton("Logout", Color.FromArgb(80, 80, 250), Width - 102, 0, 60, 20);
+                button.Click += OnClick;
+            }
+            
             /* Bring window to front as focussed */
             TopMost = true;
             BringToFront();
@@ -44,7 +49,7 @@ namespace La_Vita_e_Bella.gui
             if (!(sender is Control)) return;
             Control control = (Control) sender;
 
-            switch (control.Text.ToLower())
+            switch (control.Text)
             {
                 case "x":
                     Console.WriteLine("Exitting...");
@@ -53,6 +58,14 @@ namespace La_Vita_e_Bella.gui
 
                 case "_":
                     WindowState = FormWindowState.Minimized;
+                    break;
+
+                case "Logout":
+                    if (!logout) break;
+                    GC.Collect();
+
+                    Program.login.Visible = true;
+                    Visible = false;
                     break;
             }
         }
