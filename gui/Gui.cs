@@ -44,7 +44,7 @@ namespace La_Vita_e_Bella.gui
             BringToFront();
             Focus();
         }
-
+        
         /* Called on window click */
         private void OnClick(object sender, EventArgs args)
         {
@@ -64,7 +64,7 @@ namespace La_Vita_e_Bella.gui
 
                 case "Logout":
                     if (!logout) break;
-                    Program.Show(Program.login, this);
+                    Program.Show(Program.login);
 
                     GC.Collect();
                     break;
