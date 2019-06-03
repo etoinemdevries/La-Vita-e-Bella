@@ -11,12 +11,13 @@ namespace La_Vita_e_Bella
         /* Guis */
         public static readonly Kassa kassa;
         public static readonly Login login;
+        public static Gui current;
 
         [STAThread]
         public static void Main(string[] args)
         {
-            // TODO: Login screen
-            Application.Run(kassa);
+            /* Start update loop */
+            Application.Run(current = login);
         }
 
         static Program()
@@ -26,10 +27,11 @@ namespace La_Vita_e_Bella
         }
 
         /* Shows a gui and hides the current gui */
-        public static void Show(Gui showed, Gui current)
+        public static void Show(Gui showed)
         {
             showed.Visible = true;
             current.Visible = false;
+            showed = current;
         }
     }
 }
