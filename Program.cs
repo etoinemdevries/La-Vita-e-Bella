@@ -11,6 +11,7 @@ namespace La_Vita_e_Bella
         /* Guis */
         public static readonly Kassa kassa;
         public static readonly Login login;
+        public static readonly Keuken keuken;
 
         [STAThread]
         public static void Main(string[] args)
@@ -23,6 +24,7 @@ namespace La_Vita_e_Bella
         {
             kassa = new Kassa();
             login = new Login();
+            keuken = new Keuken();
         }
 
         /* Shows a gui and hides the current gui */

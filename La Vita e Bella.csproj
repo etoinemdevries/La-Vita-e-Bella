@@ -36,12 +36,17 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gui\Gui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\guis\Keuken.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="gui\guis\Kassa.cs">
