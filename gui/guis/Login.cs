@@ -9,21 +9,30 @@ namespace La_Vita_e_Bella.gui.guis
     {
         public Login() : base(false)
         {
-            Name = Text = "Hallo";
-            hi();
+            Name = Text = "Login";
+            LoginCheck();
         }
 
-        public void hi()
+        public void LoginCheck()
         {
-            Button next = AddButton("->", Color.White, Width - 61, 0, 20, 20);
-            Label hallo = AddLabel("Hallo", Color.Red, 50, 10, 20, 20);
-            next.Click += volgende;
-        }
+            string Hallo = "9999";
 
-        private void volgende(object butt, EventArgs args)
-        {
-            Hide();
-            Show();
+            switch(Hallo)
+            {
+                case "0000":
+                    Name = Text = "Kassa";
+                    break;
+                case "9999":
+                    Name = Text = "Keuken";
+                    break;
+                case "5555":
+                    Name = Text = "Boekhouding";
+                    break;
+                default:
+                    Name = Text = "FOUT";
+                    break;
+            }
+
         }
     }
 }
