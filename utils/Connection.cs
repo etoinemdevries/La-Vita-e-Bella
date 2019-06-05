@@ -7,25 +7,23 @@ using System.Threading;
 /* Robert */
 namespace La_Vita_e_Bella
 {
-    public class Client
+    public class Connection
     {
-        public static readonly Encoding encoding = Encoding.UTF8;
-        private Socket socket;
+        public static readonly Encoding encoding = Encoding.ASCII;
+        private TcpClient client;
 
-        public Client(IPEndPoint point)
+        public Connection(string ip, int port)
         {
-            socket = new Socket(point.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect(point);
-
-            Console.WriteLine("Connected client to {0}:{1}", point.Address, point.Port);
+            client = new TcpClient(ip, port);
+            Console.WriteLine("Connected client to {0}:{1}", ip, port);
         }
 
-        public Client(Socket socket)
+        public Connection(TcpClient client)
         {
-            this.socket = socket;
+            this.client = client;
         }
-
-        ~Client()
+        
+        ~Connection()
         {
             Disconnect();
         }
@@ -34,19 +32,19 @@ namespace La_Vita_e_Bella
         public string Read()
         {
             if (!IsConnected()) return "";
-
             byte[] bytes = new byte[1024];
-            int result = socket.Receive(bytes);
 
-            return encoding.GetString(bytes, 0, result);
+            int received = client.GetStream().Read(bytes, 0, bytes.Length);
+            return encoding.GetString(bytes, 0, received);
         }
 
         /* Sends a message to the server */
         public bool Write(string msg)
         {
             if (!IsConnected()) return false;
+            byte[] bytes = encoding.GetBytes(msg);
 
-            socket.Send(encoding.GetBytes(msg));
+            client.GetStream().Write(bytes, 0, bytes.Length);
             return true;
         }
 
@@ -54,30 +52,28 @@ namespace La_Vita_e_Bella
         public void Disconnect()
         {
             if (!IsConnected()) return;
-            socket.Disconnect(false);
+            client.Close();
         }
 
         /* Gets if the socket is still connected to the server */
         public bool IsConnected()
         {
-            return socket.Connected;
+            return client.Connected;
         }
     }
 
     public class Server
     {
-        private Socket socket;
+        private TcpListener server;
 
-        public Server(int port, int limit)
+        public Server(int port)
         {
-            IPAddress address = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
-            IPEndPoint point = new IPEndPoint(address, port);
-
-            socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            socket.Bind(point);
-            socket.Listen(limit);
+            IPEndPoint point = new IPEndPoint(IPAddress.Any, port);
+            server = new TcpListener(point);
+            server.Start();
 
             Console.WriteLine("Hosting server on {0}:{1}", point.Address, point.Port);
+            server.AcceptTcpClient();
         }
 
         ~Server()
@@ -88,13 +84,18 @@ namespace La_Vita_e_Bella
         /* On connect event */
         public event EventHandler OnConnect;
 
-        /* Runs server */
         public void Run()
         {
             while (true)
             {
-                Socket socket = this.socket.Accept();
-                new Thread(() => OnConnect(this, new ConnectArgs(new Client(socket)))).Start();
+                if (!server.Pending())
+                {
+                    Thread.Sleep(50);
+                    continue;
+                }
+
+                Connection connection = new Connection(server.AcceptTcpClient());
+                OnConnect(this, new ConnectArgs(connection));
             }
         }
 
@@ -102,28 +103,23 @@ namespace La_Vita_e_Bella
         public void Shutdown()
         {
             if (!IsOpen()) return;
-            socket.Disconnect(false);
+            server.Stop();
         }
 
         /* Gets if the server is open */
         public bool IsOpen()
         {
-            return socket.Connected;
+            return server.Server.Connected;
         }
     }
 
     public class ConnectArgs : EventArgs
     {
-        private readonly Client client;
+        public readonly Connection connection;
 
-        public ConnectArgs(Client client)
+        public ConnectArgs(Connection connection)
         {
-            this.client = client;
-        }
-
-        public Client GetClient()
-        {
-            return client;
+            this.connection = connection;
         }
     }
 }

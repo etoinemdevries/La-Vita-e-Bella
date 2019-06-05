@@ -1,4 +1,5 @@
-﻿using System;
+﻿using La_Vita_e_Bella.ticket;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -123,6 +124,41 @@ namespace La_Vita_e_Bella.gui
             button.FlatAppearance.BorderSize = 0;
             Controls.Add(button);
             return button;
+        }
+
+        /* Adds a ticket to the gui */
+        protected Panel AddTicket(Ticket ticket, int x, int y)
+        {
+            Panel border = new Panel
+            {
+                BackColor = Color.FromArgb(25, 25, 25)
+            };
+
+            Panel panel = new Panel
+            {
+                BackColor = Color.FromArgb(105, 105, 105)
+            };
+
+            Panel line = new Panel
+            {
+                BackColor = Color.FromArgb(25, 25, 25)
+            };
+
+            Label table = new Label
+            {
+                Text = ticket.table.ToString(),
+                Font = new Font("Arial", 15)
+            };
+            
+            border.SetBounds(x - 1, y - 1, 302, 402);
+            line.SetBounds(0, 20, 300, 1);
+            panel.SetBounds(1, 1, 300, 400);
+
+            panel.Controls.Add(line);
+            panel.Controls.Add(table);
+            border.Controls.Add(panel);
+            Controls.Add(border);
+            return panel;
         }
     }
 }
