@@ -19,27 +19,11 @@ namespace La_Vita_e_Bella
         {
             /* Start application */
             //Application.Run(current = kassa);
+            Connection connection = new Connection("192.168.43.21", 1337);
 
-            Server server = new Server(1337);
-            server.OnConnect += OnConnect;
-            server.Run();
-        }
-
-        private static void OnConnect(object sender, EventArgs args)
-        {
-            if (!(args is ConnectArgs))
+            while (true)
             {
-                Console.WriteLine("Invalid args");
-                return;
-            }
-
-            ConnectArgs connectArgs = (ConnectArgs) args;
-            Console.WriteLine("New connection: " + sender);
-            Connection connection = connectArgs.connection;
-
-            while (connection.IsConnected())
-            {
-                Console.WriteLine("MSG: " + connection.Read());
+                connection.Write(Console.ReadLine());
             }
         }
 
