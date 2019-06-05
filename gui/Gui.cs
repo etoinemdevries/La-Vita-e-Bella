@@ -65,7 +65,7 @@ namespace La_Vita_e_Bella.gui
 
                 case "Logout":
                     if (!logout) break;
-                    Program.Show(Program.login);
+                    Program.instance.Show(Program.instance.login);
 
                     GC.Collect();
                     break;

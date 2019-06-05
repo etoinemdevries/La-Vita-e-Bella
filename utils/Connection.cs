@@ -73,7 +73,6 @@ namespace La_Vita_e_Bella
             server.Start();
 
             Console.WriteLine("Hosting server on {0}:{1}", point.Address, point.Port);
-            server.AcceptTcpClient();
         }
 
         ~Server()
@@ -94,8 +93,11 @@ namespace La_Vita_e_Bella
                     continue;
                 }
 
-                Connection connection = new Connection(server.AcceptTcpClient());
-                OnConnect(this, new ConnectArgs(connection));
+                new Thread(() =>
+                {
+                    Connection connection = new Connection(server.AcceptTcpClient());
+                    OnConnect(this, new ConnectArgs(connection));
+                }).Start();
             }
         }
 
