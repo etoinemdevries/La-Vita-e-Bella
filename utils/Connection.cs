@@ -4,87 +4,70 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
+/* Robert */
 namespace La_Vita_e_Bella.utils
 {
     public class Connection
     {
-        public readonly Encoding encoding = Encoding.UTF32;
-        private Socket socket;
+        public static readonly Encoding encoding = Encoding.UTF32;
+        private TcpClient client;
 
         public Connection(string ip, int port)
         {
-            IPEndPoint point = new IPEndPoint(IPAddress.Parse(ip), port);
-
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect(point);
-
-            Console.WriteLine("Connected to {0}:{1}", ip, port);
+            client = new TcpClient(ip, port);
+            Console.WriteLine("Connected client to {0}:{1}", ip, port);
         }
 
-        public Connection(Socket socket)
+        public Connection(TcpClient client)
         {
-            this.socket = socket;
+            this.client = client;
         }
 
         ~Connection()
         {
-            if (IsConnected()) Disconnect();
+            Disconnect();
         }
 
-        /* Reads from the connected pc */
+        /* Reads a message from the server */
         public string Read()
         {
-            if (!IsConnected()) return null;
+            if (!IsConnected()) return "";
             byte[] bytes = new byte[1024];
 
-            try
-            {
-                socket.Receive(bytes);
-                if (!IsConnected()) return null;
-
-                return encoding.GetString(bytes);
-            }
-            catch
-            {
-                return null;
-            }
+            int received = client.GetStream().Read(bytes, 0, bytes.Length);
+            return encoding.GetString(bytes, 0, received);
         }
 
-        /* Writes to the connected pc */
+        /* Sends a message to the server */
         public bool Write(string msg)
         {
-            try
-            {
-                if (!IsConnected()) return false;
-                socket.Send(encoding.GetBytes(msg));
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            if (!IsConnected()) return false;
+            byte[] bytes = encoding.GetBytes(msg);
+
+            client.GetStream().Write(bytes, 0, bytes.Length);
+            return true;
         }
 
-        /* Disconnects this connection */
+        /* Gets the remote connections ip and port */
+        public string GetName()
+        {
+            IPEndPoint point = ((IPEndPoint)client.Client.RemoteEndPoint);
+            return point.Address + ":" + point.Port;
+        }
+
+        /* Disconnects the socket from the server */
         public void Disconnect()
         {
             if (!IsConnected()) return;
-            socket.Disconnect(false);
+            client.Close();
         }
 
-        /* Gets the connected pcs name */
-        public string GetName()
-        {
-            IPEndPoint endPoint = (IPEndPoint) socket.RemoteEndPoint;
-            return endPoint.Address + ":" + endPoint.Port;
-        }
-
-        /* Gets if this connection is still opened */
+        /* Checks if the connection is still open */
         public bool IsConnected()
         {
             try
             {
-                return socket.Poll(50, SelectMode.SelectRead);
+                return !(client.Client.Poll(50, SelectMode.SelectRead) && client.Client.Available == 0);
             }
             catch
             {
@@ -95,48 +78,54 @@ namespace La_Vita_e_Bella.utils
 
     public class Server
     {
-        private Socket socket;
-        
+        private TcpListener server;
+
         public Server(int port)
         {
             IPEndPoint point = new IPEndPoint(IPAddress.Any, port);
-
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Bind(point);
+            server = new TcpListener(point);
+            server.Start();
 
             Console.WriteLine("Hosting server on port {0}", point.Port);
-            new Thread(() => Run()).Start();
         }
-        
-        /* Runs the server */
-        private void Run()
+
+        ~Server()
         {
-            while (Opened())
+            Shutdown();
+        }
+
+        /* On connect event */
+        public event EventHandler OnConnect;
+
+        public void Run()
+        {
+            while (IsOpen())
             {
-                Thread.Sleep(500);
-                if (socket.Blocking || !socket.Connected) continue;
+                if (!server.Pending())
+                {
+                    Thread.Sleep(500);
+                    continue;
+                }
 
                 new Thread(() =>
                 {
-                    Connection connection = new Connection(socket.Accept());
+                    Connection connection = new Connection(server.AcceptTcpClient());
                     OnConnect(this, new ConnectArgs(connection));
                 }).Start();
             }
         }
 
-        /* Called on new connection */
-        public EventHandler OnConnect;
-        
-        /* Shuts down this server */
+        /* Shuts down the server */
         public void Shutdown()
         {
-            socket.Disconnect(false);
+            if (!IsOpen()) return;
+            server.Stop();
         }
 
-        /* Gets wether the server is running */
-        public bool Opened()
+        /* Gets if the server is open */
+        public bool IsOpen()
         {
-            return socket.Available == 0;
+            return server.Server.Available == 0;
         }
     }
 
