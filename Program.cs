@@ -1,7 +1,10 @@
 ﻿using La_Vita_e_Bella.gui;
 using La_Vita_e_Bella.gui.guis;
+using La_Vita_e_Bella.utils;
 using System;
+using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace La_Vita_e_Bella
 {
@@ -9,6 +12,7 @@ namespace La_Vita_e_Bella
     public class Program
     {
         public static Program instance;
+        private static List<Connection> connections = new List<Connection>();
         
         /* Guis */
         public readonly Kassa kassa;
@@ -20,7 +24,39 @@ namespace La_Vita_e_Bella
         public static void Main(string[] args)
         {
             /* Start application */
-            instance = new Program();
+            //instance = new Program();
+            Server server = new Server(1337);
+            server.OnConnect += OnConnect;
+        }
+
+        public static void OnConnect(object sender, EventArgs args)
+        {
+            if (!(args is ConnectArgs)) return;
+            Connection connection = ((ConnectArgs) args).connection;
+            connections.Add(connection);
+
+            Console.WriteLine("New connection -> " + connection.GetName());
+            new Thread(() => Run(connection)).Start();
+
+            while (connection.IsConnected())
+            {
+                string read = connection.Read();
+                Console.WriteLine("[{0}] {1}", connection.GetName(), read);
+                
+                foreach(Connection conn in connections)
+                {
+                    if (conn == connection) continue;
+                    conn.Write("[" + connection.GetName() + "] " + read);
+                }
+            }
+        }
+
+        private static void Run(Connection connection)
+        {
+            while (connection.IsConnected())
+            {
+                connection.Write(Console.ReadLine());
+            }
         }
 
         private Program()
@@ -37,7 +73,6 @@ namespace La_Vita_e_Bella
         public void Show(Gui showed)
         {
             showed.Visible = true;
-
             current.Visible = false;
             showed = current;
         }
