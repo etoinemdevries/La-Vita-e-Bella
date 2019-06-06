@@ -55,23 +55,18 @@ namespace La_Vita_e_Bella
                 string read = connection.Read();
                 if (read.Equals(""))
                 {
-                    connections.Remove(connection);
-
-                    foreach (Connection conn in connections)
-                    {
-                        Console.WriteLine("{0} disconnected", connection.GetName());
-                        conn.Write(conn.GetName() + " disconnected");
-                    }
-
-                    break;
-                }
-
-                foreach (Connection conn in connections)
-                {
                     if (conn == connection) continue;
-                    Console.WriteLine("[{0}] {1}", connection.GetName(), read);
                     conn.Write("[" + connection.GetName() + "] " + read);
                 }
+            }
+            */
+        }
+
+        private static void Run(Connection connection)
+        {
+            while (connection.IsConnected())
+            {
+                connection.Write(Console.ReadLine());
             }
         }
 
