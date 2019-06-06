@@ -5,6 +5,7 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Net.Sockets;
 
 namespace La_Vita_e_Bella
 {
@@ -25,8 +26,11 @@ namespace La_Vita_e_Bella
         {
             /* Start application */
             // new Program();
-            Server server = new Server(1337);
-            server.OnConnect += OnConnect;
+            Connection connection = new Connection("192.168.43.21", 1337);
+            while (true)
+            {
+                connection.Write(Console.ReadLine());
+            }
         }
         
         public static void OnConnect(object sender, EventArgs args)
