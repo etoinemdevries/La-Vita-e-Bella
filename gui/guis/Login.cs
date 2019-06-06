@@ -9,8 +9,7 @@ namespace La_Vita_e_Bella.gui.guis
     {
         public Login() : base(false)
         {
-            Name = Text = "Login";
-            LoginCheck();
+            NewImage("boorbanner.jpg");
         }
 
         public void LoginCheck()
@@ -33,6 +32,17 @@ namespace La_Vita_e_Bella.gui.guis
                     break;
             }
 
+            /* When there is a connection, repeat to the server console what room you logged into */
+            //connection.Write("Room: " + Name);
+
+        }
+
+        private void NewImage(string filename)
+        {
+            Image newImage = Image.FromFile(filename);
+            Point ulCorner = new Point((Width - newImage.Width) / 2, (Height - newImage.Height) / 2);
+
+            AddAsset(ulCorner, newImage);
         }
     }
 }

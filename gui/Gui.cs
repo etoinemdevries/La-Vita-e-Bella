@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 /* Robert */
 namespace La_Vita_e_Bella.gui
@@ -9,6 +10,7 @@ namespace La_Vita_e_Bella.gui
     public class Gui : Form
     {
         public readonly bool logout;
+        private List<Asset> assets = new List<Asset>();
 
         protected Gui(bool logout)
         {
@@ -20,6 +22,9 @@ namespace La_Vita_e_Bella.gui
             /* Get screen bounds and set window bounds */
             Rectangle bounds = Screen.PrimaryScreen.Bounds;
             SetBounds(0, 0, bounds.Width, bounds.Height);
+
+            /* Registers paint event */
+            Paint += OnPaint;
 
             /* Set background color */
             BackColor = Color.FromArgb(75, 75, 75);
@@ -44,6 +49,17 @@ namespace La_Vita_e_Bella.gui
             TopMost = true;
             BringToFront();
             Focus();
+        }
+
+        private void OnPaint(object sender, EventArgs args)
+        {
+            if (!(args is PaintEventArgs)) return;
+            PaintEventArgs eventArgs = (PaintEventArgs)args;
+
+            foreach(Asset asset in assets)
+            {
+                eventArgs.Graphics.DrawImage(asset.img, asset.point);
+            }
         }
         
         /* Called on window click */
@@ -126,6 +142,14 @@ namespace La_Vita_e_Bella.gui
             return button;
         }
 
+        /* Adds a new image */
+        protected Asset AddAsset(Point point, Image img)
+        {
+            Asset asset = new Asset(point, img);
+            assets.Add(asset);
+            return asset;
+        }
+
         /* Adds a ticket to the gui */
         protected Panel AddTicket(Ticket ticket, int x, int y)
         {
@@ -159,6 +183,18 @@ namespace La_Vita_e_Bella.gui
             border.Controls.Add(panel);
             Controls.Add(border);
             return panel;
+        }
+    }
+
+    public class Asset
+    {
+        public readonly Point point;
+        public readonly Image img;
+
+        public Asset(Point point, Image img)
+        {
+            this.point = point;
+            this.img = img;
         }
     }
 }

@@ -53,6 +53,7 @@ namespace La_Vita_e_Bella
                     conn.Write("[" + connection.GetName() + "] " + read);
                 }
             }
+            */
         }
 
         private static void Run(Connection connection)
