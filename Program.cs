@@ -1,6 +1,7 @@
 ﻿using La_Vita_e_Bella.gui;
 using La_Vita_e_Bella.gui.guis;
 using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace La_Vita_e_Bella
@@ -20,7 +21,23 @@ namespace La_Vita_e_Bella
         public static void Main(string[] args)
         {
             /* Start application */
-            instance = new Program();
+            //Application.Run(current = kassa);
+            Connection connection = new Connection("192.168.43.21", 1337);
+            Console.WriteLine("From: " + connection.Read());
+            new Thread(() => Run(connection)).Start();
+
+            while (true)
+            {
+                Console.WriteLine(connection.Read());
+            }
+        }
+        
+        private static void Run(Connection connection)
+        {
+            while (connection.IsConnected())
+            {
+                connection.Write(Console.ReadLine());
+            }
         }
 
         private Program()

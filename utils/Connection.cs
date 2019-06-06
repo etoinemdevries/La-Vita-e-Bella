@@ -9,12 +9,12 @@ namespace La_Vita_e_Bella
 {
     public class Connection
     {
-        public static readonly Encoding encoding = Encoding.UTF32;
+        public static readonly Encoding encoding = Encoding.ASCII;
         private TcpClient client;
 
         public Connection(string ip, int port)
         {
-            client = new TcpClient(ip, port);
+                client = new TcpClient(ip, port);
             Console.WriteLine("Connected client to {0}:{1}", ip, port);
         }
 
