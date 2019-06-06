@@ -9,7 +9,7 @@ namespace La_Vita_e_Bella
 {
     public class Connection
     {
-        public static readonly Encoding encoding = Encoding.ASCII;
+        public static readonly Encoding encoding = Encoding.UTF32;
         private TcpClient client;
 
         public Connection(string ip, int port)
@@ -37,7 +37,7 @@ namespace La_Vita_e_Bella
             int received = client.GetStream().Read(bytes, 0, bytes.Length);
             return encoding.GetString(bytes, 0, received);
         }
-
+        
         /* Sends a message to the server */
         public bool Write(string msg)
         {
@@ -47,7 +47,7 @@ namespace La_Vita_e_Bella
             client.GetStream().Write(bytes, 0, bytes.Length);
             return true;
         }
-
+        
         /* Disconnects the socket from the server */
         public void Disconnect()
         {
@@ -58,7 +58,7 @@ namespace La_Vita_e_Bella
         /* Gets if the socket is still connected to the server */
         public bool IsConnected()
         {
-            return client.Connected;
+            return client.Client.Connected;
         }
     }
 
@@ -72,7 +72,7 @@ namespace La_Vita_e_Bella
             server = new TcpListener(point);
             server.Start();
 
-            Console.WriteLine("Hosting server on {0}:{1}", point.Address, point.Port);
+            Console.WriteLine("Hosting server on port {0}", point.Port);
         }
 
         ~Server()
