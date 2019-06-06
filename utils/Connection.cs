@@ -40,10 +40,9 @@ namespace La_Vita_e_Bella.utils
             try
             {
                 socket.Receive(bytes);
-                string msg = encoding.GetString(bytes);
+                if (!IsConnected()) return null;
 
-                if(msg == "Disconnect") Disconnect();
-                return msg;
+                return encoding.GetString(bytes);
             }
             catch
             {
@@ -70,7 +69,6 @@ namespace La_Vita_e_Bella.utils
         public void Disconnect()
         {
             if (!IsConnected()) return;
-            Console.WriteLine("Disconnect");
             socket.Disconnect(false);
         }
 
@@ -118,8 +116,11 @@ namespace La_Vita_e_Bella.utils
                 Thread.Sleep(500);
                 if (socket.Blocking || !socket.Connected) continue;
 
-                Connection connection = new Connection(socket.Accept());
-                OnConnect(this, new ConnectArgs(connection));
+                new Thread(() =>
+                {
+                    Connection connection = new Connection(socket.Accept());
+                    OnConnect(this, new ConnectArgs(connection));
+                }).Start();
             }
         }
 
