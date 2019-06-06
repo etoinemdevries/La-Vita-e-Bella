@@ -27,43 +27,20 @@ namespace La_Vita_e_Bella
             /* Start application */
             // new Program();
             Connection connection = new Connection("192.168.43.21", 1337);
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    Console.WriteLine(connection.Read());
+                }
+            }).Start();
+
             while (true)
             {
                 connection.Write(Console.ReadLine());
             }
         }
         
-        public static void OnConnect(object sender, EventArgs args)
-        {
-            if (!(args is ConnectArgs)) return;
-            Connection connection = ((ConnectArgs) args).connection;
-            connections.Add(connection);
-
-            Console.WriteLine("New connection -> " + connection.GetName());
-            new Thread(() => Run(connection)).Start();
-
-            while (connection.IsConnected())
-            {
-                string read = connection.Read();
-                Console.WriteLine("[{0}] {1}", connection.GetName(), read);
-                
-                foreach(Connection conn in connections)
-                {
-                    if (conn == connection) continue;
-                    conn.Write("[" + connection.GetName() + "] " + read);
-                }
-            }
-            */
-        }
-
-        private static void Run(Connection connection)
-        {
-            while (connection.IsConnected())
-            {
-                connection.Write(Console.ReadLine());
-            }
-        }
-
         private Program()
         {
             kassa = new Kassa();
