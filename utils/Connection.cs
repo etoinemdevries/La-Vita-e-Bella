@@ -74,6 +74,13 @@ namespace La_Vita_e_Bella.utils
             socket.Disconnect(false);
         }
 
+        /* Gets the connected pcs name */
+        public string GetName()
+        {
+            IPEndPoint endPoint = (IPEndPoint) socket.RemoteEndPoint;
+            return endPoint.Address + ":" + endPoint.Port;
+        }
+
         /* Gets if this connection is still opened */
         public bool IsConnected()
         {
@@ -91,8 +98,7 @@ namespace La_Vita_e_Bella.utils
     public class Server
     {
         private Socket socket;
-        private Thread thread;
-
+        
         public Server(int port)
         {
             IPEndPoint point = new IPEndPoint(IPAddress.Any, port);
@@ -103,12 +109,7 @@ namespace La_Vita_e_Bella.utils
             Console.WriteLine("Hosting server on port {0}", point.Port);
             new Thread(() => Run()).Start();
         }
-
-        ~Server()
-        {
-            Shutdown();
-        }
-
+        
         /* Runs the server */
         private void Run()
         {
@@ -128,14 +129,13 @@ namespace La_Vita_e_Bella.utils
         /* Shuts down this server */
         public void Shutdown()
         {
-            thread.Abort();
             socket.Disconnect(false);
         }
 
         /* Gets wether the server is running */
         public bool Opened()
         {
-            return socket.Connected;
+            return socket.Available == 0;
         }
     }
 
