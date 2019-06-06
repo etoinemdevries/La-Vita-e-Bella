@@ -2,10 +2,8 @@
 using La_Vita_e_Bella.gui.guis;
 using La_Vita_e_Bella.utils;
 using System;
-using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System.Net.Sockets;
 
 namespace La_Vita_e_Bella
 {
@@ -26,10 +24,17 @@ namespace La_Vita_e_Bella
         {
             /* Start application */
             // new Program();
-            Connection connection = new Connection("192.168.43.21", 1337);
+            Server server = new Server(1337);
+            server.OnConnect += OnConnect;
+
             while (true)
             {
-                connection.Write(Console.ReadLine());
+                string msg = Console.ReadLine();
+
+                foreach(Connection connection in connections)
+                {
+                    connection.Write(msg);
+                }
             }
         }
         
@@ -39,28 +44,34 @@ namespace La_Vita_e_Bella
             Connection connection = ((ConnectArgs) args).connection;
             connections.Add(connection);
 
-            Console.WriteLine("New connection -> " + connection.GetName());
-            new Thread(() => Run(connection)).Start();
-
+            foreach (Connection conn in connections)
+            {
+                Console.WriteLine("{0} connected", connection.GetName());
+                conn.Write(connection.GetName() + " connected");
+            }
+            
             while (connection.IsConnected())
             {
                 string read = connection.Read();
-                Console.WriteLine("[{0}] {1}", connection.GetName(), read);
-                
-                foreach(Connection conn in connections)
+                if (read.Equals(""))
+                {
+                    connections.Remove(connection);
+
+                    foreach (Connection conn in connections)
+                    {
+                        Console.WriteLine("{0} disconnected", connection.GetName());
+                        conn.Write(conn.GetName() + " disconnected");
+                    }
+
+                    break;
+                }
+
+                foreach (Connection conn in connections)
                 {
                     if (conn == connection) continue;
+                    Console.WriteLine("[{0}] {1}", connection.GetName(), read);
                     conn.Write("[" + connection.GetName() + "] " + read);
                 }
-            }
-            */
-        }
-
-        private static void Run(Connection connection)
-        {
-            while (connection.IsConnected())
-            {
-                connection.Write(Console.ReadLine());
             }
         }
 
