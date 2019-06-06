@@ -24,9 +24,23 @@ namespace La_Vita_e_Bella
         public static void Main(string[] args)
         {
             /* Start application */
-            //instance = new Program();
-            Server server = new Server(1337);
-            server.OnConnect += OnConnect;
+            //Application.Run(current = kassa);
+            Connection connection = new Connection("192.168.43.21", 1337);
+            Console.WriteLine("From: " + connection.Read());
+            new Thread(() => Run(connection)).Start();
+
+            while (true)
+            {
+                Console.WriteLine(connection.Read());
+            }
+        }
+        
+        private static void Run(Connection connection)
+        {
+            while (connection.IsConnected())
+            {
+                connection.Write(Console.ReadLine());
+            }
         }
 
         public static void OnConnect(object sender, EventArgs args)
