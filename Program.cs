@@ -14,8 +14,9 @@ namespace La_Vita_e_Bella
     {
         public static Program instance;
         private static List<Connection> connections = new List<Connection>();
-        
+
         /* Guis */
+        public readonly Boekhouding boekhouding;
         public readonly Kassa kassa;
         public readonly Login login;
         public readonly Keuken keuken;
@@ -25,7 +26,9 @@ namespace La_Vita_e_Bella
         public static void Main(string[] args)
         {
             /* Start application */
-            // new Program();
+            instance = new Program();
+
+            /*
             Connection connection = new Connection("192.168.43.21", 1337);
             new Thread(() =>
             {
@@ -39,16 +42,18 @@ namespace La_Vita_e_Bella
             {
                 connection.Write(Console.ReadLine());
             }
+            */
         }
-        
+
         private Program()
         {
+            boekhouding = new Boekhouding();
             kassa = new Kassa();
             login = new Login();
             keuken = new Keuken();
 
-            current = login;
-            Application.Run(login);
+            current = boekhouding;
+            Application.Run(current);
         }
         
         /* Shows a gui and hides the current gui */
