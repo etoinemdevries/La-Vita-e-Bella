@@ -9,7 +9,7 @@ namespace La_Vita_e_Bella.utils
 {
     public class Connection
     {
-        public static readonly Encoding encoding = Encoding.UTF32;
+        public static readonly Encoding ascii = Encoding.ASCII;
         private TcpClient client;
 
         public Connection(string ip, int port)
@@ -34,24 +34,38 @@ namespace La_Vita_e_Bella.utils
             if (!IsConnected()) return "";
             byte[] bytes = new byte[1024];
 
-            int received = client.GetStream().Read(bytes, 0, bytes.Length);
-            return encoding.GetString(bytes, 0, received);
+            try
+            {
+                int received = client.GetStream().Read(bytes, 0, bytes.Length);
+                return Encryption.Decrypt(ascii.GetString(bytes, 0, received));
+            }
+            catch
+            {
+                return "";
+            }
         }
 
         /* Sends a message to the server */
         public bool Write(string msg)
         {
             if (!IsConnected()) return false;
-            byte[] bytes = encoding.GetBytes(msg);
+            byte[] bytes = ascii.GetBytes(Encryption.Encrypt(msg));
 
-            client.GetStream().Write(bytes, 0, bytes.Length);
-            return true;
+            try
+            {
+                client.GetStream().Write(bytes, 0, bytes.Length);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /* Gets the remote connections ip and port */
         public string GetName()
         {
-            IPEndPoint point = ((IPEndPoint)client.Client.RemoteEndPoint);
+            IPEndPoint point = (IPEndPoint)client.Client.RemoteEndPoint;
             return point.Address + ":" + point.Port;
         }
 
@@ -87,6 +101,7 @@ namespace La_Vita_e_Bella.utils
             server.Start();
 
             Console.WriteLine("Hosting server on port {0}", point.Port);
+            new Thread(() => Run()).Start();
         }
 
         ~Server()
@@ -97,7 +112,7 @@ namespace La_Vita_e_Bella.utils
         /* On connect event */
         public event EventHandler OnConnect;
 
-        public void Run()
+        private void Run()
         {
             while (IsOpen())
             {
@@ -126,6 +141,21 @@ namespace La_Vita_e_Bella.utils
         public bool IsOpen()
         {
             return server.Server.Available == 0;
+        }
+    }
+
+    public static class Encryption
+    {
+        /* Encrypts a string to base64 */
+        public static string Encrypt(string input)
+        {
+            return Convert.ToBase64String(Encoding.UTF32.GetBytes(input));
+        }
+
+        /* Decrypts a string from base64 */
+        public static string Decrypt(string input)
+        {
+            return Encoding.UTF32.GetString(Convert.FromBase64String(input));
         }
     }
 

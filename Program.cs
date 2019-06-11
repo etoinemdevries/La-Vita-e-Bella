@@ -2,10 +2,8 @@
 using La_Vita_e_Bella.gui.guis;
 using La_Vita_e_Bella.utils;
 using System;
-using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System.Net.Sockets;
 
 namespace La_Vita_e_Bella
 {
@@ -32,13 +30,42 @@ namespace La_Vita_e_Bella
             Connection connection = new Connection("192.168.43.21", 1337);
             new Thread(() =>
             {
-                while (true)
-                {
-                    Console.WriteLine(connection.Read());
-                }
-            }).Start();
+                string msg = Console.ReadLine();
 
-            while (true)
+                foreach(Connection connection in connections)
+                {
+                    connection.Write(msg);
+                }
+            }
+        }
+        
+        public static void OnConnect(object sender, EventArgs args)
+        {
+            if (!(args is ConnectArgs)) return;
+            Connection connection = ((ConnectArgs) args).connection;
+            connections.Add(connection);
+
+            foreach (Connection conn in connections)
+            {
+                Console.WriteLine("{0} connected", connection.GetName());
+                conn.Write(connection.GetName() + " connected");
+            }
+            
+            while (connection.IsConnected())
+            {
+                string read = connection.Read();
+                if (read.Equals(""))
+                {
+                    if (conn == connection) continue;
+                    conn.Write("[" + connection.GetName() + "] " + read);
+                }
+            }
+            */
+        }
+
+        private static void Run(Connection connection)
+        {
+            while (connection.IsConnected())
             {
                 connection.Write(Console.ReadLine());
             }
