@@ -67,6 +67,9 @@
     <EmbeddedResource Include="gui\guis\Boekhouding.resx">
       <DependentUpon>Boekhouding.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="gui\guis\Kassa.resx">
+      <DependentUpon>Kassa.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="gui\guis\Keuken.resx">
       <DependentUpon>Keuken.cs</DependentUpon>
     </EmbeddedResource>

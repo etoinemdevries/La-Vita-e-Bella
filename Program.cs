@@ -24,7 +24,7 @@ namespace La_Vita_e_Bella
         public static void Main(string[] args)
         {
             /* Start application */
-            instance = new Program();
+            new Program();
 
             /*
             Connection connection = new Connection("192.168.43.21", 1337);
@@ -74,6 +74,7 @@ namespace La_Vita_e_Bella
 
         private Program()
         {
+            instance = this;
             boekhouding = new Boekhouding();
             kassa = new Kassa();
             login = new Login();
