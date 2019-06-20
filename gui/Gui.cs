@@ -12,6 +12,10 @@ namespace La_Vita_e_Bella.gui
         public readonly bool logout;
         private List<Asset> assets = new List<Asset>();
 
+        public Gui() : this(true)
+        {
+        }
+
         protected Gui(bool logout)
         {
             /* Set window title and fullscreen */
@@ -44,7 +48,7 @@ namespace La_Vita_e_Bella.gui
                 Button button = AddButton("Logout", Color.FromArgb(80, 80, 250), Width - 102, 0, 60, 20);
                 button.Click += OnClick;
             }
-            
+
             /* Bring window to front as focussed */
             TopMost = true;
             BringToFront();
@@ -82,8 +86,7 @@ namespace La_Vita_e_Bella.gui
                 case "Logout":
                     if (!logout) break;
                     Program.instance.Show(Program.instance.login);
-
-                    GC.Collect();
+                   
                     break;
             }
         }

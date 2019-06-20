@@ -69,7 +69,7 @@ namespace La_Vita_e_Bella
             {
                 connection.Write(Console.ReadLine());
             }
-            */
+         
         }
 
         private Program()
@@ -79,7 +79,7 @@ namespace La_Vita_e_Bella
             login = new Login();
             keuken = new Keuken();
 
-            current = boekhouding;
+            current = keuken;
             Application.Run(current);
         }
         
