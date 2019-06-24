@@ -10,7 +10,22 @@ namespace La_Vita_e_Bella.gui.guis
 
         public Login() : base(false)
         {
-            //NewImage("boorbanner.jpg");
+            Button login = new Button();
+            login.Text = "login";
+            login.Font = new Font("", 18);
+            login.SetBounds(855, 400, 80, 40);
+            login.BackColor = Color.Gray;
+            login.ForeColor = Color.White;
+            this.Controls.Add(login);
+
+            TextBox loginbox = new TextBox();
+            loginbox.SetBounds(700, 400, 155, 40);
+            loginbox.Font = new Font("verdana", 18);
+            loginbox.BackColor = Color.White;
+            loginbox.ForeColor = Color.Black;
+            this.Controls.Add(loginbox);
+            
+            
         }
 
         public void LoginCheck()
