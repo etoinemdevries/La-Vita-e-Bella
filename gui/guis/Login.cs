@@ -10,6 +10,8 @@ namespace La_Vita_e_Bella.gui.guis
 
         public Login() : base(false)
         {
+            AddImage("logo.png");
+
             Button login = new Button();
             login.Text = "login";
             login.Font = new Font("", 18);
@@ -24,8 +26,7 @@ namespace La_Vita_e_Bella.gui.guis
             loginbox.BackColor = Color.White;
             loginbox.ForeColor = Color.Black;
             this.Controls.Add(loginbox);
-            
-            
+
         }
 
         public void LoginCheck()
@@ -53,12 +54,18 @@ namespace La_Vita_e_Bella.gui.guis
 
         }
 
-        private void NewImage(string filename)
+        private void AddImage(string filename)
         {
-            Image newImage = Image.FromFile(filename);
-            Point ulCorner = new Point((Width - newImage.Width) / 2, (Height - newImage.Height) / 2);
+            Image image = Image.FromFile(filename);
+            Rectangle rectangle = new Rectangle((Width - image.Width) / 2, (Height - image.Height) / 2, image.Width, image.Height);
+            
+            AddAsset(rectangle, image);
+        }
 
-            AddAsset(ulCorner, newImage);
+        private void AddImage(string filename, Rectangle rectangle)
+        {
+            Image image = Image.FromFile(filename);
+            AddAsset(rectangle, image);
         }
 
         private void InitializeComponent()

@@ -57,12 +57,13 @@ namespace La_Vita_e_Bella.gui
 
         private void OnPaint(object sender, EventArgs args)
         {
+            Console.WriteLine("onpaint");
             if (!(args is PaintEventArgs)) return;
             PaintEventArgs eventArgs = (PaintEventArgs)args;
 
             foreach(Asset asset in assets)
             {
-                eventArgs.Graphics.DrawImage(asset.img, asset.point);
+                eventArgs.Graphics.DrawImage(asset.img, asset.rectangle.X, asset.rectangle.Y, asset.rectangle.Width, asset.rectangle.Height);
             }
         }
         
@@ -146,9 +147,9 @@ namespace La_Vita_e_Bella.gui
         }
 
         /* Adds a new image */
-        protected Asset AddAsset(Point point, Image img)
+        protected Asset AddAsset(Rectangle rectangle, Image img)
         {
-            Asset asset = new Asset(point, img);
+            Asset asset = new Asset(rectangle, img);
             assets.Add(asset);
             return asset;
         }
@@ -191,12 +192,12 @@ namespace La_Vita_e_Bella.gui
 
     public class Asset
     {
-        public readonly Point point;
+        public readonly Rectangle rectangle;
         public readonly Image img;
 
-        public Asset(Point point, Image img)
+        public Asset(Rectangle rectangle, Image img)
         {
-            this.point = point;
+            this.rectangle = rectangle;
             this.img = img;
         }
     }
