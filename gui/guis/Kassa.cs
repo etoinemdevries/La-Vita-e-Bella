@@ -1,5 +1,8 @@
 ﻿using La_Vita_e_Bella.ticket;
 using System.Collections.Generic;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 /* Robert */
 namespace La_Vita_e_Bella.gui.guis
@@ -13,7 +16,19 @@ namespace La_Vita_e_Bella.gui.guis
                 { 100, new Dish("dish", 5) }
             };
 
-            AddTicket(new Ticket(dishes, 4), 25, 20);
+            AddTicket(new Ticket(dishes, 4), 0, 20);
+            AddTicket(new Ticket(dishes, 5), 309, 20);
+            AddTicket(new Ticket(dishes, 6), 618, 20);
+            AddTicket(new Ticket(dishes, 7), 927, 20);
+
+            Button verstuur = new Button();
+            verstuur.Text = "verstuur";
+            verstuur.SetBounds(1230, 780, 310, 90);
+            verstuur.BackColor = Color.White;
+            verstuur.Font = new Font("", 23);
+            this.Controls.Add(verstuur);
+
+
         }
 
         private void InitializeComponent()
@@ -29,7 +44,7 @@ namespace La_Vita_e_Bella.gui.guis
 
         }
 
-        private void Kassa_Load(object sender, System.EventArgs e)
+        private void Kassa_Load(object sender, EventArgs e)
         {
 
         }

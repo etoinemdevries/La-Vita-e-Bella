@@ -80,7 +80,7 @@ namespace La_Vita_e_Bella
             login = new Login();
             keuken = new Keuken();
 
-            current = login;
+            current = kassa;
             Application.Run(current);
         }
         
