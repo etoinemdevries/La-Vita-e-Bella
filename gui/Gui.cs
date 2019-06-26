@@ -177,14 +177,31 @@ namespace La_Vita_e_Bella.gui
                 Text = ticket.table.ToString(),
                 Font = new Font("Arial", 15)
             };
-            
+
+            Button verstuur = new Button
+            {
+                Text = "verstuur",
+                BackColor = Color.White,
+                Font = new Font("Arial", 15)
+
+            };
+
+            CheckBox check = new CheckBox
+            {
+
+            };
+
+            verstuur.SetBounds(101, 351, 110, 47);
+            check.SetBounds(285,-40,100,100);
             border.SetBounds(x - 1, y - 1, 302, 402);
             line.SetBounds(0, 20, 300, 1);
             panel.SetBounds(1, 1, 300, 400);
-
+            
             panel.Controls.Add(line);
             panel.Controls.Add(table);
             border.Controls.Add(panel);
+            panel.Controls.Add(verstuur);
+            panel.Controls.Add(check);
             Controls.Add(border);
             return panel;
         }
