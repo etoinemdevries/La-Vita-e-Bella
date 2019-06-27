@@ -49,6 +49,12 @@
     <Compile Include="gui\guis\Boekhouding.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="gui\guis\BonPagina.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="gui\guis\BonPagina.Designer.cs">
+      <DependentUpon>BonPagina.cs</DependentUpon>
+    </Compile>
     <Compile Include="gui\guis\Keuken.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,8 +70,14 @@
     <Compile Include="utils\Connection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="gui\Gui.resx">
+      <DependentUpon>Gui.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="gui\guis\Boekhouding.resx">
       <DependentUpon>Boekhouding.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gui\guis\BonPagina.resx">
+      <DependentUpon>BonPagina.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="gui\guis\Kassa.resx">
       <DependentUpon>Kassa.cs</DependentUpon>

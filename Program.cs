@@ -18,6 +18,7 @@ namespace La_Vita_e_Bella
         public readonly Kassa kassa;
         public readonly Login login;
         public readonly Keuken keuken;
+        public readonly BonPagina bonpagina;
         public Gui current;
 
         [STAThread]
@@ -79,8 +80,9 @@ namespace La_Vita_e_Bella
             kassa = new Kassa();
             login = new Login();
             keuken = new Keuken();
+            bonpagina = new BonPagina();
 
-            current = keuken;
+            current = bonpagina;
             Application.Run(current);
         }
         
