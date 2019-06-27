@@ -2,6 +2,7 @@
 using La_Vita_e_Bella.gui.guis;
 using La_Vita_e_Bella.utils;
 using System;
+using System.Data;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -20,12 +21,17 @@ namespace La_Vita_e_Bella
         public readonly Keuken keuken;
         public Gui current;
 
+
         [STAThread]
         public static void Main(string[] args)
         {
+
+            //Console.WriteLine(result.Rows.Find(result.PrimaryKey));
+            
             /* Start application */
             new Program();
 
+            
             /*
             Connection connection = new Connection("192.168.43.21", 1337);
             new Thread(() =>
