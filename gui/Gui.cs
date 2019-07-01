@@ -55,22 +55,11 @@ namespace La_Vita_e_Bella.gui
             Focus();
         }
 
-        private void OnPaint(object sender, EventArgs args)
-        {
-            if (!(args is PaintEventArgs)) return;
-            PaintEventArgs eventArgs = (PaintEventArgs)args;
-
-            foreach(Asset asset in assets)
-            {
-                eventArgs.Graphics.DrawImage(asset.img, asset.point);
-            }
-        }
-        
         /* Called on window click */
         private void OnClick(object sender, EventArgs args)
         {
             if (!(sender is Control)) return;
-            Control control = (Control) sender;
+            Control control = (Control)sender;
 
             switch (control.Text)
             {
@@ -86,7 +75,7 @@ namespace La_Vita_e_Bella.gui
                 case "Logout":
                     if (!logout) break;
                     Program.instance.Show(Program.instance.login);
-                   
+
                     break;
             }
         }
@@ -145,14 +134,6 @@ namespace La_Vita_e_Bella.gui
             return button;
         }
 
-        /* Adds a new image */
-        protected Asset AddAsset(Point point, Image img)
-        {
-            Asset asset = new Asset(point, img);
-            assets.Add(asset);
-            return asset;
-        }
-
         /* Adds a ticket to the gui */
         protected Panel AddTicket(Ticket ticket, int x, int y)
         {
@@ -191,11 +172,11 @@ namespace La_Vita_e_Bella.gui
             };
 
             verstuur.SetBounds(101, 351, 110, 47);
-            check.SetBounds(285,-40,100,100);
+            check.SetBounds(285, -40, 100, 100);
             border.SetBounds(x - 1, y - 1, 302, 402);
             line.SetBounds(0, 20, 300, 1);
             panel.SetBounds(1, 1, 300, 400);
-            
+
             panel.Controls.Add(line);
             panel.Controls.Add(table);
             border.Controls.Add(panel);
@@ -205,37 +186,6 @@ namespace La_Vita_e_Bella.gui
             return panel;
         }
 
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
-            // 
-            // Gui
-            // 
-            this.ClientSize = new System.Drawing.Size(282, 253);
-            this.Name = "Gui";
-            this.Load += new System.EventHandler(this.Gui_Load);
-            this.ResumeLayout(false);
-
-        }
-
-        private void Gui_Load(object sender, EventArgs e)
-        {
-
-        }
-    }
-
-    public class Asset
-    {
-        public readonly Point point;
-        public readonly Image img;
-
-        public Asset(Point point, Image img)
-        {
-            this.point = point;
-            this.img = img;
-        }
-    }
-}
 
         private void OnPaint(object sender, EventArgs args)
         {
@@ -243,15 +193,20 @@ namespace La_Vita_e_Bella.gui
             if (!(args is PaintEventArgs)) return;
             PaintEventArgs eventArgs = (PaintEventArgs)args;
 
-            foreach(Asset asset in assets)
+            foreach (Asset asset in assets)
             {
                 eventArgs.Graphics.DrawImage(asset.img, asset.rectangle.X, asset.rectangle.Y, asset.rectangle.Width, asset.rectangle.Height);
             }
+        }
+
         protected Asset AddAsset(Rectangle rectangle, Image img)
         {
             Asset asset = new Asset(rectangle, img);
             assets.Add(asset);
             return asset;
+        }
+    }
+
     public class Asset
     {
         public readonly Rectangle rectangle;
@@ -262,3 +217,5 @@ namespace La_Vita_e_Bella.gui
             this.rectangle = rectangle;
             this.img = img;
         }
+    }
+}

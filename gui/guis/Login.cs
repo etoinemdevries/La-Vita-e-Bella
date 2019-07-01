@@ -7,6 +7,7 @@ namespace La_Vita_e_Bella.gui.guis
 {
     public class Login : Gui
     {
+        private TextBox loginbox;
 
         public Login() : base(false)
         {
@@ -18,9 +19,11 @@ namespace La_Vita_e_Bella.gui.guis
             login.SetBounds(855, 400, 80, 40);
             login.BackColor = Color.Gray;
             login.ForeColor = Color.White;
+            login.Click += OnLogin;
+
             this.Controls.Add(login);
 
-            TextBox loginbox = new TextBox();
+            loginbox = new TextBox();
             loginbox.SetBounds(700, 400, 155, 40);
             loginbox.Font = new Font("verdana", 18);
             loginbox.BackColor = Color.White;
@@ -29,29 +32,25 @@ namespace La_Vita_e_Bella.gui.guis
 
         }
 
-        public void LoginCheck()
+        public void OnLogin(object sender, EventArgs args)
         {
-            string Hallo = "9999";
-
-            switch(Hallo)
+            switch(loginbox.Text)
             {
                 case "0000":
                     Name = Text = "Kassa";
+                    Program.instance.Show(Program.instance.kassa);
                     break;
-                case "9999":
+                case "1111":
                     Name = Text = "Keuken";
+                    Program.instance.Show(Program.instance.keuken);
                     break;
-                case "5555":
+                case "2222":
                     Name = Text = "Boekhouding";
+                    Program.instance.Show(Program.instance.boekhouding);
                     break;
                 default:
-                    Name = Text = "FOUT";
                     break;
             }
-
-            /* When there is a connection, repeat to the server console what room you logged into */
-            //connection.Write("Room: " + Name);
-
         }
 
         private void AddImage(string filename)

@@ -97,7 +97,7 @@ namespace La_Vita_e_Bella
         {
             showed.Visible = true;
             current.Visible = false;
-            showed = current;
+            current = showed;
         }
     }
 }
