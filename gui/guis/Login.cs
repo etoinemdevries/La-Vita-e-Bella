@@ -48,6 +48,10 @@ namespace La_Vita_e_Bella.gui.guis
                     Name = Text = "Boekhouding";
                     Program.instance.Show(Program.instance.boekhouding);
                     break;
+                case "3333":
+                    Name = Text = "BonPagina";
+                    Program.instance.Show(Program.instance.bonpagina);
+                    break;
                 default:
                     break;
             }

@@ -205,6 +205,24 @@ namespace La_Vita_e_Bella.gui
             assets.Add(asset);
             return asset;
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // Gui
+            // 
+            this.ClientSize = new System.Drawing.Size(282, 253);
+            this.Name = "Gui";
+            this.Load += new System.EventHandler(this.Gui_Load);
+            this.ResumeLayout(false);
+
+        }
+
+        private void Gui_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class Asset
